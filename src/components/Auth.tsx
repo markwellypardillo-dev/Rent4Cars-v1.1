@@ -1,7 +1,8 @@
 import { useState, FormEvent } from 'react';
 import { supabase } from '../lib/supabase';
 import { X, Mail, Lock, User, Terminal } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import SkeletonLandingPage from './SkeletonLandingPage';
 
 interface AuthProps {
   onClose: () => void;
@@ -117,7 +118,11 @@ export default function Auth({ onClose, onBypass }: AuthProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+    <>
+      <AnimatePresence>
+        {loading && <SkeletonLandingPage />}
+      </AnimatePresence>
+      <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -213,5 +218,6 @@ export default function Auth({ onClose, onBypass }: AuthProps) {
 
       </motion.div>
     </div>
+    </>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Calendar, MapPin, CreditCard, CheckCircle, Upload, Printer, ArrowRight, ArrowLeft } from 'lucide-react';
+import { X, Calendar, MapPin, CreditCard, CheckCircle, Upload, Printer, ArrowRight, ArrowLeft, Shield } from 'lucide-react';
 import { Car, MessagingService, NotificationService } from '../services/dataService';
 import { supabase } from '../lib/supabase';
 
@@ -21,7 +21,7 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
     address: '',
     startDate: '',
     days: 1,
-    comprehensiveInsurance: false,
+    insuranceLevel: 'basic' as 'basic' | 'standard' | 'premium',
     childSeat: false,
     prepaidFuel: false,
     idType: 'Driver\'s License',
@@ -75,7 +75,8 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
 
   const getAddonsTotal = () => {
     let total = 0;
-    if (formData.comprehensiveInsurance) total += 500 * formData.days;
+    if (formData.insuranceLevel === 'standard') total += 250 * formData.days;
+    if (formData.insuranceLevel === 'premium') total += 500 * formData.days;
     if (formData.childSeat) total += 200 * formData.days;
     if (formData.prepaidFuel) total += 2000;
     return total;
@@ -391,23 +392,61 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
           >
             <h3 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Add-ons & Upgrades</h3>
             <div className="space-y-4">
-              <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
-                <input 
-                  type="checkbox" 
-                  className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary focus:ring-primary"
-                  checked={formData.comprehensiveInsurance}
-                  onChange={(e) => setFormData({...formData, comprehensiveInsurance: e.target.checked})}
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
-                    <h4 className="font-bold text-gray-900 dark:text-white leading-tight">
-                      Comprehensive Insurance 
-                    </h4>
-                    <span className="text-primary font-bold text-sm whitespace-nowrap">+₱500/day</span>
+              <div className="bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-800 rounded-3xl p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="text-primary w-5 h-5" />
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Full coverage wrapper for zero worry. Covers damages, theft, and third-party liabilities.</p>
+                  <div>
+                    <h4 className="font-bold text-gray-900 dark:text-white">Insurance Coverage</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Select your protection level</p>
+                  </div>
                 </div>
-              </label>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {(['basic', 'standard', 'premium'] as const).map((level) => {
+                    const costs = { basic: 0, standard: 250, premium: 500 };
+                    const labels = { basic: 'Basic', standard: 'Standard', premium: 'Premium' };
+                    const descs = { 
+                      basic: 'Minimum legal requirements.', 
+                      standard: 'Better protection for peace of mind.', 
+                      premium: 'Full coverage. Zero worry.' 
+                    };
+                    const isActive = formData.insuranceLevel === level;
+                    
+                    return (
+                      <div 
+                        key={level}
+                        onClick={() => setFormData({...formData, insuranceLevel: level})}
+                        className={`p-4 rounded-2xl cursor-pointer border-2 transition-all flex flex-col items-start text-left ${
+                          isActive 
+                            ? 'border-primary bg-primary/5 ring-1 ring-primary/20' 
+                            : 'border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 bg-gray-50 dark:bg-gray-900/50'
+                        }`}
+                      >
+                         <h5 className="font-bold text-gray-900 dark:text-white mb-1">{labels[level]}</h5>
+                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 flex-1">{descs[level]}</p>
+                         <div className="mt-auto w-full flex items-center justify-between">
+                            <span className="text-sm font-bold text-primary">
+                              {costs[level] === 0 ? 'Free' : `+₱${costs[level]}/day`}
+                            </span>
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isActive ? 'border-primary' : 'border-gray-300 dark:border-gray-600'}`}>
+                              {isActive && <div className="w-2.5 h-2.5 bg-primary rounded-full" />}
+                            </div>
+                         </div>
+                      </div>
+                    )
+                  })}
+                </div>
+                {formData.insuranceLevel !== 'basic' && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50 flex justify-between items-center text-sm">
+                    <span className="text-gray-500 dark:text-gray-400">Estimator ({formData.days} days x {formData.insuranceLevel === 'standard' ? '₱250' : '₱500'})</span>
+                    <span className="font-bold text-gray-900 dark:text-white">
+                      +₱{(formData.insuranceLevel === 'standard' ? 250 : 500) * formData.days}
+                    </span>
+                  </div>
+                )}
+              </div>
 
               <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
                 <input 
