@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notifications_log>
+  <notification priority="high">
+    <id>MSG-001</id>
+    <timestamp>2026-05-15T10:00:00Z</timestamp>
+    <type>system</type>
+    <title>Welcome to Rent4Cars</title>
+    <message_body>Your premium logistics account is now active. Explore our Davao fleet.</message_body>
+    <read>false</read>
+  </notification>
+</notifications_log>
