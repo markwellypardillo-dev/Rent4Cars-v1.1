@@ -11,7 +11,7 @@ Copy and paste the following, replacing the placeholders with your real keys:
 ```env
 # SUPABASE CONFIG
 # Use the API URL from Supabase Settings > API
-VITE_SUPABASE_URL=https://lskoejolvcxvloshfosp.supabase.co
+VITE_SUPABASE_URL=https://gyvghjbhvkufubu.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (your long key)
 
 # GEMINI CONFIG
