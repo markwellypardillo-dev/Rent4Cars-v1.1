@@ -79,10 +79,12 @@ export default function Navbar({
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
-          <DarkModeToggle />
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:block">
+            <DarkModeToggle />
+          </div>
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative">
                 <button 
                   onClick={toggleNotifications}
@@ -102,7 +104,7 @@ export default function Navbar({
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute top-full mt-2 right-0 w-80 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden"
+                      className="fixed sm:absolute top-16 sm:top-full right-4 sm:right-0 sm:mt-2 w-[calc(100vw-32px)] sm:w-80 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden z-[100] origin-top-right"
                     >
                       <div className="p-4 border-b border-gray-50 dark:border-gray-800 flex justify-between items-center bg-gray-50/50 dark:bg-gray-800/50">
                         <span className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Notifications</span>
@@ -225,6 +227,10 @@ export default function Navbar({
                   {item.label}
                 </button>
               ))}
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between sm:hidden">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Theme</span>
+                <DarkModeToggle />
+              </div>
             </div>
           </motion.div>
         )}

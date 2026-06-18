@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -22,6 +22,7 @@ import BookingSystem from './components/BookingSystem';
 import { supabase } from './lib/supabase';
 import { Car, Notification, NotificationService } from './services/dataService';
 import NotificationToast from './components/NotificationToast';
+import { useBackButton } from './hooks/useBackButton';
 
 export default function App() {
   const [user, setUser] = useState<any | null>(null);
@@ -178,6 +179,16 @@ export default function App() {
     setSelectedCar(car);
     setActiveMode('rent');
   };
+
+  const isModalOpen = showAuth || showProfile || activeMode !== null;
+  const handleModalClose = useCallback(() => {
+    setShowAuth(false);
+    setShowProfile(false);
+    setActiveMode(null);
+    setSelectedCar(null);
+  }, []);
+
+  useBackButton(isModalOpen, handleModalClose);
 
   return (
     <div className="min-h-screen morph-bg selection:bg-primary selection:text-white">

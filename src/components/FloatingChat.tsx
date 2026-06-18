@@ -3,6 +3,7 @@ import { MessageCircle, X, Send, User, MessageSquare, Bot, Headset } from 'lucid
 import { motion, AnimatePresence } from 'motion/react';
 import { io, Socket } from 'socket.io-client';
 import AdminLiveChat from './AdminLiveChat';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface Message {
   role: 'user' | 'mechanic' | 'system';
@@ -40,6 +41,8 @@ export default function FloatingChat({ user }: FloatingChatProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [adminUnreadCount, setAdminUnreadCount] = useState(0);
+
+  useBackButton(isOpen, () => setIsOpen(false));
 
   useEffect(() => {
     if (!isOpen || !user || isAdmin) return; // Connect only when opened and logged in (and not admin here)

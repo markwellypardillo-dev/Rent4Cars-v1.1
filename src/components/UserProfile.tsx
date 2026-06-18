@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { NotificationService } from '../services/dataService';
 import MyRentals from './MyRentals';
 import AdminRentals from './AdminRentals';
+import DarkModeToggle from './DarkModeToggle';
 
 interface UserProfileProps {
   user: any;
@@ -212,6 +213,14 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all text-ellipsis"
                 />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] uppercase font-bold text-gray-400 px-1 dark:text-gray-500">Appearance</label>
+              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-4 py-3">
+                <span className="text-sm font-medium text-gray-900 dark:text-white mt-1">Theme</span>
+                <DarkModeToggle />
               </div>
             </div>
 
