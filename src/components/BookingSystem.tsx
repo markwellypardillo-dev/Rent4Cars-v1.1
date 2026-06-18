@@ -564,10 +564,62 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
                       onClick={() => setFormData({...formData, onlineProvider: provider})}
                       className={`py-3 rounded-xl text-xs font-black uppercase tracking-widest border transition-all ${formData.onlineProvider === provider ? 'bg-white dark:bg-gray-900 border-primary text-primary shadow-sm' : 'border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'}`}
                     >
-                      {provider === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal'}
+                      {provider === 'stripe' ? 'Credit Card' : 'PayPal'}
                     </button>
                   ))}
                 </div>
+              )}
+
+              {formData.paymentMethod === 'now' && formData.onlineProvider === 'stripe' && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="p-6 bg-white dark:bg-gray-800 rounded-3xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-gray-900 dark:text-white">Card Details</span>
+                    <div className="flex gap-1">
+                      {/* Fake card icons */}
+                      <div className="w-8 h-5 bg-blue-600 rounded flex items-center justify-center text-[8px] text-white font-bold italic">VISA</div>
+                      <div className="w-8 h-5 bg-red-500 rounded flex items-center justify-center text-[8px] text-white font-bold">MC</div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Card Number</label>
+                    <div className="relative">
+                      <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input 
+                        type="text" 
+                        placeholder="0000 0000 0000 0000" 
+                        maxLength={19}
+                        className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary/20 text-sm font-mono placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">Expiry</label>
+                      <input 
+                        type="text" 
+                        placeholder="MM/YY" 
+                        maxLength={5}
+                        className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary/20 text-sm font-mono placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">CVC</label>
+                      <input 
+                        type="text" 
+                        placeholder="123" 
+                        maxLength={3}
+                        className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary/20 text-sm font-mono placeholder:text-gray-300 dark:placeholder:text-gray-600"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-gray-400 flex justify-center items-center gap-1 mt-2">
+                    <Shield size={10} /> Secured by Stripe
+                  </p>
+                </motion.div>
               )}
 
               <button 

@@ -318,19 +318,41 @@ export default function Fleet({ user, onInquire, onRent }: FleetProps) {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700"
+          className="space-y-12"
         >
-          <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No vehicles found</h3>
-          <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6">
-            We couldn't find any cars matching your current filters. Try adjusting your search criteria.
-          </p>
-          <button 
-            onClick={resetFilters}
-            className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-          >
-            Clear Filters
-          </button>
+          <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700">
+            <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No vehicles found</h3>
+            <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-6">
+              We couldn't find any cars matching your current filters. Try adjusting your search criteria.
+            </p>
+            <button 
+              onClick={resetFilters}
+              className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+            >
+              Clear Filters
+            </button>
+          </div>
+
+          {cars.length > 0 && (
+            <div className="pt-8 border-t border-gray-100 dark:border-gray-800">
+              <div className="mb-8">
+                <h3 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Recommended for you</h3>
+                <p className="text-gray-500 dark:text-gray-400 mt-1">Here's a handpicked selection of our top vehicles.</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {cars.slice(0, 3).map((car, index) => (
+                  <CarCard 
+                    key={car.id}
+                    car={car}
+                    index={index}
+                    onInquire={onInquire}
+                    onRent={onRent}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { NotificationService } from '../services/dataService';
 import MyRentals from './MyRentals';
 import AdminRentals from './AdminRentals';
+import AdminFleetManager from './AdminFleetManager';
 import DarkModeToggle from './DarkModeToggle';
 
 interface UserProfileProps {
@@ -27,6 +28,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
   const [loadingReport, setLoadingReport] = useState(false);
   const [showRentals, setShowRentals] = useState(false);
   const [showAdminRentals, setShowAdminRentals] = useState(false);
+  const [showFleetManager, setShowFleetManager] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchReport = async () => {
@@ -202,7 +204,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                  <button
                   type="button"
                   onClick={() => setShowAdminRentals(true)}
-                  className="w-full p-6 md:p-8 bg-gray-900 dark:bg-gray-800 border-2 border-gray-800 dark:border-gray-700 text-white rounded-3xl font-bold hover:bg-gray-800 dark:hover:bg-gray-700 transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-xl text-left md:text-center md:col-span-2 group"
+                  className="w-full p-6 md:p-8 bg-gray-900 dark:bg-gray-800 border-2 border-gray-800 dark:border-gray-700 text-white rounded-3xl font-bold hover:bg-gray-800 dark:hover:bg-gray-700 transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-xl text-left md:text-center group"
                 >
                   <div className="w-12 h-12 md:w-20 md:h-20 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
                     <Car size={24} className="text-white md:w-10 md:h-10" />
@@ -210,6 +212,20 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                   <div>
                     <div className="text-lg md:text-2xl font-display mb-1 md:mb-2">Manage Rentals</div>
                     <div className="text-xs md:text-sm text-gray-400 font-normal">Review and approve bookings, manage fleet availability, and resolve current rental statuses.</div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowFleetManager(true)}
+                  className="w-full p-6 md:p-8 bg-white dark:bg-gray-800/80 border-2 border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white rounded-3xl font-bold hover:border-primary dark:hover:border-primary transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-sm text-left md:text-center group"
+                >
+                  <div className="w-12 h-12 md:w-20 md:h-20 bg-gray-50 dark:bg-gray-900 rounded-full flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:text-primary transition-all duration-300">
+                    <Settings size={24} className="text-gray-400 md:w-10 md:h-10" />
+                  </div>
+                  <div>
+                    <div className="text-lg md:text-2xl font-display mb-1 md:mb-2">Fleet Inventory</div>
+                    <div className="text-xs md:text-sm text-gray-500 font-normal">Dynamically add, edit price and features, or remove cars from the database.</div>
                   </div>
                 </button>
 
@@ -359,6 +375,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
 
           {showRentals && <MyRentals user={user} onClose={() => setShowRentals(false)} />}
           {showAdminRentals && <AdminRentals onClose={() => setShowAdminRentals(false)} />}
+          {showFleetManager && <AdminFleetManager onClose={() => setShowFleetManager(false)} />}
 
           <AnimatePresence>
             {showReport && (
