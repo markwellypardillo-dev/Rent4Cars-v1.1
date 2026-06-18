@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Shield, Gauge, Zap, Info, Heart } from 'lucide-react';
+import { X, Shield, Gauge, Zap, Info, Heart, Star } from 'lucide-react';
 import { Car, WishlistService } from '../services/dataService';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
@@ -189,6 +189,27 @@ export default function CarSpecModal({ car, user, onClose, onRent }: CarSpecModa
                     <p className="text-sm text-gray-500 dark:text-gray-400">{car.specifications?.fuelEconomy || 'Economical range for Davao transit'}</p>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-800">
+              <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <Star size={14} className="text-yellow-400" fill="currentColor" />
+                User Reviews & Ratings
+              </h3>
+              <div className="space-y-4">
+                <div className="bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-1 mb-2 text-yellow-400">
+                    {[1,2,3,4,5].map(i => <Star key={i} size={12} fill="currentColor" />)}
+                  </div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">"Excellent condition, very smooth drive around the city. Highly recommended!"</p>
+                  <p className="text-xs text-gray-400 font-bold uppercase mt-2">— Verified Renter</p>
+                </div>
+                {/* Submit review stub */}
+                <button className="w-full text-xs text-gray-500 font-bold uppercase hover:text-primary transition-colors text-left flex justify-between items-center px-2">
+                  Write a review
+                  <span>+</span>
+                </button>
               </div>
             </div>
 

@@ -270,6 +270,28 @@ function safeWriteXML(filePath: string, data: string) {
   };
 
   // --- RENTALS SYSTEM (PROXY) ---
+  app.get("/api/rentals/car/:carId", async (req, res) => {
+    if (!supabase) return res.status(503).json({ error: "Supabase not configured on server" });
+    
+    try {
+      // Fetch all rentals for a specific car without enforcing user RLS for read-only availability
+      const client = process.env.SUPABASE_SERVICE_ROLE_KEY && supabase ? supabase : getSupabaseClient({});
+      if (!client) throw new Error("Could not initialize database client.");
+
+      const { data, error } = await client
+        .from('rentals')
+        .select('days, created_at, status')
+        .eq('car_id', req.params.carId)
+        .in('status', ['pending', 'approved', 'active']);
+
+      if (error) throw error;
+      res.json(data || []);
+    } catch (err: any) {
+      console.error("Car Rentals Fetch Exception:", err.message);
+      res.status(500).json({ error: "Failed to fetch car availability." });
+    }
+  });
+
   app.post("/api/my-rentals", async (req, res) => {
     if (!supabase) return res.status(503).json({ error: "Supabase not configured on server" });
     

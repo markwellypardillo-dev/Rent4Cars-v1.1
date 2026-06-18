@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Calendar, MapPin, CreditCard, CheckCircle, Upload, Printer, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Car, MessagingService, NotificationService } from '../services/dataService';
@@ -11,7 +11,7 @@ interface BookingSystemProps {
   onSuccess?: (car: Car) => void;
 }
 
-type Step = 'fulfillment' | 'duration' | 'identity' | 'payment' | 'confirmation';
+type Step = 'fulfillment' | 'duration' | 'addons' | 'identity' | 'payment' | 'confirmation';
 
 export default function BookingSystem({ car, user, onClose, onSuccess }: BookingSystemProps) {
   const [step, setStep] = useState<Step>('fulfillment');
@@ -21,12 +21,45 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
     address: '',
     startDate: '',
     days: 1,
-    idType: 'PhilID',
+    comprehensiveInsurance: false,
+    childSeat: false,
+    prepaidFuel: false,
+    idType: 'Driver\'s License',
     idFile: null as File | null,
     paymentMethod: 'later',
-    onlineProvider: 'gcash'
+    onlineProvider: 'stripe'
   });
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [bookedDates, setBookedDates] = useState<string[]>([]);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
+
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      setCheckingAvailability(true);
+      try {
+        const res = await fetch(`/api/rentals/car/${car.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          // Convert rental duration into array of booked dates (YYYY-MM-DD)
+          const dates: string[] = [];
+          data.forEach((booking: any) => {
+            const start = new Date(booking.created_at);
+            for (let i = 0; i < booking.days; i++) {
+              const date = new Date(start);
+              date.setDate(date.getDate() + i);
+              dates.push(date.toISOString().split('T')[0]);
+            }
+          });
+          setBookedDates(dates);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch availability calendar data:", err);
+      } finally {
+        setCheckingAvailability(false);
+      }
+    };
+    fetchAvailability();
+  }, [car.id]);
 
   const getShippingFee = () => {
     if (formData.fulfillment !== 'delivery') return 0;
@@ -38,6 +71,18 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
     if (formData.deliveryCity === 'Davao de Oro') return 2000;
     if (formData.deliveryCity === 'Davao Oriental (Other)') return 1000;
     return 3500; // Other / Outside Region
+  };
+
+  const getAddonsTotal = () => {
+    let total = 0;
+    if (formData.comprehensiveInsurance) total += 500 * formData.days;
+    if (formData.childSeat) total += 200 * formData.days;
+    if (formData.prepaidFuel) total += 2000;
+    return total;
+  };
+
+  const getTotal = () => {
+    return (formData.days * Number(car.price)) + getShippingFee() + getAddonsTotal();
   };
 
   const nextStep = () => {
@@ -54,12 +99,20 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
         setSubmitError("Please select a start date to proceed.");
         return;
       }
+      // Check real-time availability
+      if (bookedDates.includes(formData.startDate)) {
+        setSubmitError("This date is already booked. Please select an available date.");
+        return;
+      }
       setSubmitError(null);
+      setStep('addons');
+    }
+    else if (step === 'addons') {
       setStep('identity');
     }
     else if (step === 'identity') {
       if (!formData.idFile) {
-        setSubmitError("Please upload your ID to proceed.");
+        setSubmitError("Please upload your Driver's License or ID to proceed.");
         return;
       }
       setSubmitError(null);
@@ -76,7 +129,8 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
 
   const prevStep = () => {
     if (step === 'duration') setStep('fulfillment');
-    else if (step === 'identity') setStep('duration');
+    else if (step === 'addons') setStep('duration');
+    else if (step === 'identity') setStep('addons');
     else if (step === 'payment') setStep('identity');
   };
 
@@ -93,7 +147,8 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
   <fulfillment>${formData.fulfillment}</fulfillment>
   <address>${formData.fulfillment === 'delivery' ? `${formData.deliveryCity}: ${formData.address}` : getCarHub()}</address>
   <days>${formData.days}</days>
-  <total_price>${(formData.days * Number(car.price)) + getShippingFee()}</total_price>
+  <addons_total>${getAddonsTotal()}</addons_total>
+  <total_price>${getTotal()}</total_price>
   <id_type>${formData.idType}</id_type>
   <payment_method>${formData.paymentMethod}</payment_method>
   <timestamp>${new Date().toISOString()}</timestamp>
@@ -117,7 +172,7 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
         car_id: car.id,
         car_name: car.name,
         days: formData.days,
-        price: (formData.days * Number(car.price)) + getShippingFee(),
+        price: getTotal(),
         payment_method: formData.paymentMethod === 'now' ? 'online' : 'in-person',
         online_provider: formData.paymentMethod === 'now' ? formData.onlineProvider : null,
         fulfillment: formData.fulfillment,
@@ -159,7 +214,7 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
       await MessagingService.sendMessage(
         user?.user_metadata?.full_name || 'System',
         'customer' as any,
-        `NEW RENTAL LOGGED: ${car.name} for ${formData.days} days. Fulfillment: ${formData.fulfillment}. Total: ₱${(formData.days * Number(car.price)) + getShippingFee()}`,
+        `NEW RENTAL LOGGED: ${car.name} for ${formData.days} days. Fulfillment: ${formData.fulfillment}. Total: ₱${getTotal()}`,
         user.id
       ).catch(e => console.warn("Messaging notification failed:", e));
 
@@ -320,7 +375,74 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
                 )}
                 <div className="pt-2 border-t border-primary/10 dark:border-primary/20 flex justify-between items-center">
                   <span className="font-bold text-gray-700 dark:text-white">Estimated Total:</span>
-                  <span className="text-2xl font-display font-bold text-primary">₱{((formData.days * Number(car.price)) + getShippingFee()).toLocaleString()}</span>
+                  <span className="text-2xl font-display font-bold text-primary">₱{getTotal().toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      case 'addons':
+        return (
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            className="space-y-6"
+          >
+            <h3 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Add-ons & Upgrades</h3>
+            <div className="space-y-4">
+              <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
+                <input 
+                  type="checkbox" 
+                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                  checked={formData.comprehensiveInsurance}
+                  onChange={(e) => setFormData({...formData, comprehensiveInsurance: e.target.checked})}
+                />
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-900 dark:text-white flex justify-between">
+                    Comprehensive Insurance 
+                    <span className="text-primary">+₱500/day</span>
+                  </h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Full coverage wrapper for zero worry. Covers damages, theft, and third-party liabilities.</p>
+                </div>
+              </label>
+
+              <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
+                <input 
+                  type="checkbox" 
+                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                  checked={formData.childSeat}
+                  onChange={(e) => setFormData({...formData, childSeat: e.target.checked})}
+                />
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-900 dark:text-white flex justify-between">
+                    Child Seat 
+                    <span className="text-primary">+₱200/day</span>
+                  </h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Safe and comfortable ISOFIX child seating for your little passengers.</p>
+                </div>
+              </label>
+
+              <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
+                <input 
+                  type="checkbox" 
+                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                  checked={formData.prepaidFuel}
+                  onChange={(e) => setFormData({...formData, prepaidFuel: e.target.checked})}
+                />
+                <div className="flex-1">
+                  <h4 className="font-bold text-gray-900 dark:text-white flex justify-between">
+                    Prepaid Fuel 
+                    <span className="text-primary">+₱2,000 flat</span>
+                  </h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Skip the pump. Return the car at any fuel level with no extra hassle.</p>
+                </div>
+              </label>
+
+              <div className="pt-2">
+                <div className="flex justify-between items-center text-sm font-medium text-gray-500">
+                  <span>Current Selected Extras</span>
+                  <span>₱{getAddonsTotal().toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -334,20 +456,18 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
             animate={{ opacity: 1, x: 0 }} 
             className="space-y-6"
           >
-            <h3 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Identity Verification</h3>
+            <h3 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Identity & License Verification</h3>
             <div className="space-y-6">
               <div>
-                <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Select ID Type</label>
+                <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Select Document Type</label>
                 <select 
                   className="w-full p-4 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white rounded-2xl focus:ring-2 focus:ring-primary/20"
                   value={formData.idType}
                   onChange={(e) => setFormData({...formData, idType: e.target.value})}
                 >
+                  <option>Driver's License (Required for driving)</option>
+                  <option>Passport (For secondary verification)</option>
                   <option>Philippine ID (PhilID)</option>
-                  <option>Passport</option>
-                  <option>Driver’s License</option>
-                  <option>UMID</option>
-                  <option>PRC ID</option>
                 </select>
               </div>
 
@@ -361,7 +481,7 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
                   <Upload size={32} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-white">{formData.idFile ? formData.idFile.name : 'Click to upload ID'}</h4>
+                  <h4 className="font-bold text-gray-900 dark:text-white">{formData.idFile ? formData.idFile.name : 'Click to upload License / Document'}</h4>
                   <p className="text-xs text-gray-500 dark:text-gray-400">PDF, JPG, or PNG under 5MB</p>
                 </div>
               </div>
@@ -392,14 +512,14 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
               </button>
 
               {formData.paymentMethod === 'now' && (
-                <div className="grid grid-cols-3 gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-3xl border border-gray-100 dark:border-gray-800">
-                  {['gcash', 'maya', 'bank'].map((provider) => (
+                <div className="grid grid-cols-2 gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-3xl border border-gray-100 dark:border-gray-800">
+                  {['stripe', 'paypal'].map((provider) => (
                     <button
                       key={provider}
                       onClick={() => setFormData({...formData, onlineProvider: provider})}
                       className={`py-3 rounded-xl text-xs font-black uppercase tracking-widest border transition-all ${formData.onlineProvider === provider ? 'bg-white dark:bg-gray-900 border-primary text-primary shadow-sm' : 'border-transparent text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'}`}
                     >
-                      {provider === 'gcash' ? 'GCash' : provider === 'maya' ? 'Maya' : 'Bank'}
+                      {provider === 'stripe' ? 'Credit Card (Stripe)' : 'PayPal'}
                     </button>
                   ))}
                 </div>
