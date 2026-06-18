@@ -104,7 +104,7 @@ export default function CarSpecModal({ car, user, onClose, onRent }: CarSpecModa
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white dark:bg-gray-900 rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl relative z-10"
+        className="bg-white dark:bg-gray-900 rounded-[2.5rem] w-full max-w-2xl overflow-y-auto custom-scrollbar shadow-2xl relative z-10 max-h-[90vh]"
       >
         <button 
           onClick={onClose}

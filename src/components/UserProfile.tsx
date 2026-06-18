@@ -127,17 +127,30 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
         </div>
 
         <div className="p-6 sm:p-10 overflow-y-auto custom-scrollbar">
-          <div className="mb-8 text-center mt-2">
+          <div className="mb-6 text-center mt-2 shrink-0">
             <div className="relative inline-block group">
                 <button 
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto overflow-hidden border-4 border-white dark:border-gray-900 shadow-lg relative"
+                  className="w-24 h-24 shrink-0 bg-primary/10 rounded-full flex items-center justify-center mx-auto overflow-hidden border-4 border-white dark:border-gray-900 shadow-lg relative"
                 >
                     {avatarUrl ? (
-                        <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                        <img 
+                          src={avatarUrl} 
+                          alt="Avatar" 
+                          className="w-full h-full object-cover" 
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement?.classList.add('fallback-shown');
+                          }}
+                        />
                     ) : (
                         <User size={48} className="text-primary" />
+                    )}
+                    {avatarUrl && (
+                        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-primary/10">
+                           <User size={48} className="text-primary" />
+                        </div>
                     )}
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Upload size={20} className="text-white" />

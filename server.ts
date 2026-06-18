@@ -361,6 +361,35 @@ function safeWriteXML(filePath: string, data: string) {
         }
       }
 
+      if (data && data.length > 0) {
+        const rentalId = data[0].id;
+        const carName = data[0].car_name;
+        // Simulate Rental Lifecycle Updates
+        setTimeout(async () => {
+          produceNotification({
+            title: 'Car Ready & Approved',
+            message_body: `Good news! Your rental for ${carName} is approved and the car is now ready for you.`,
+            type: 'rental',
+            priority: 'high',
+            userId: postPayload.user_id
+          });
+          const adminClient = getSupabaseClient({ authHeader: null, token: null });
+          if (adminClient) {
+            await adminClient.from('rentals').update({ status: 'approved' }).eq('id', rentalId);
+          }
+        }, 15000); // 15 seconds
+
+        setTimeout(async () => {
+          produceNotification({
+            title: 'Rental Due Soon',
+            message_body: `Time's almost up for your ${carName} rental. Do you want to extend your rental days?`,
+            type: 'alert',
+            priority: 'high',
+            userId: postPayload.user_id
+          });
+        }, 45000); // 45 seconds
+      }
+
       if (error) {
         const errMsg = typeof error.message === 'string' && error.message.includes('<!DOCTYPE') 
           ? "Supabase Infrastructure Error (520)" 

@@ -394,15 +394,17 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
               <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
                 <input 
                   type="checkbox" 
-                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                  className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary focus:ring-primary"
                   checked={formData.comprehensiveInsurance}
                   onChange={(e) => setFormData({...formData, comprehensiveInsurance: e.target.checked})}
                 />
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-900 dark:text-white flex justify-between">
-                    Comprehensive Insurance 
-                    <span className="text-primary">+₱500/day</span>
-                  </h4>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
+                    <h4 className="font-bold text-gray-900 dark:text-white leading-tight">
+                      Comprehensive Insurance 
+                    </h4>
+                    <span className="text-primary font-bold text-sm whitespace-nowrap">+₱500/day</span>
+                  </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Full coverage wrapper for zero worry. Covers damages, theft, and third-party liabilities.</p>
                 </div>
               </label>
@@ -410,15 +412,17 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
               <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
                 <input 
                   type="checkbox" 
-                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                  className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary focus:ring-primary"
                   checked={formData.childSeat}
                   onChange={(e) => setFormData({...formData, childSeat: e.target.checked})}
                 />
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-900 dark:text-white flex justify-between">
-                    Child Seat 
-                    <span className="text-primary">+₱200/day</span>
-                  </h4>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
+                    <h4 className="font-bold text-gray-900 dark:text-white leading-tight">
+                      Child Seat 
+                    </h4>
+                    <span className="text-primary font-bold text-sm whitespace-nowrap">+₱200/day</span>
+                  </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Safe and comfortable ISOFIX child seating for your little passengers.</p>
                 </div>
               </label>
@@ -426,15 +430,17 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
               <label className="p-6 cursor-pointer rounded-3xl border-2 transition-all flex items-start gap-4 border-gray-100 dark:border-gray-800 hover:border-gray-200 dark:hover:border-gray-700 bg-white dark:bg-gray-800">
                 <input 
                   type="checkbox" 
-                  className="mt-1 w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                  className="mt-1 w-5 h-5 shrink-0 rounded border-gray-300 text-primary focus:ring-primary"
                   checked={formData.prepaidFuel}
                   onChange={(e) => setFormData({...formData, prepaidFuel: e.target.checked})}
                 />
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-900 dark:text-white flex justify-between">
-                    Prepaid Fuel 
-                    <span className="text-primary">+₱2,000 flat</span>
-                  </h4>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-1">
+                    <h4 className="font-bold text-gray-900 dark:text-white leading-tight">
+                      Prepaid Fuel 
+                    </h4>
+                    <span className="text-primary font-bold text-sm whitespace-nowrap">+₱2,000 flat</span>
+                  </div>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Skip the pump. Return the car at any fuel level with no extra hassle.</p>
                 </div>
               </label>
@@ -636,11 +642,12 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
       >
         <div className="p-8 pb-0 flex justify-between items-center shrink-0">
           <div className="flex gap-2">
-            {[1, 2, 3, 4].map((i) => {
+            {[1, 2, 3, 4, 5].map((i) => {
               const active = (step === 'fulfillment' && i === 1) || 
                              (step === 'duration' && i === 2) || 
-                             (step === 'identity' && i === 3) || 
-                             (step === 'payment' && i === 4) ||
+                             (step === 'addons' && i === 3) || 
+                             (step === 'identity' && i === 4) || 
+                             (step === 'payment' && i === 5) ||
                              (step === 'confirmation');
               return (
                 <div 

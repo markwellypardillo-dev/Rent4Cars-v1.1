@@ -130,15 +130,15 @@ export default function Auth({ onClose, onBypass }: AuthProps) {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl shadow-gray-900/20 overflow-hidden"
+        className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl shadow-gray-900/20 overflow-hidden max-h-[90vh] flex flex-col"
       >
-        <div className="absolute top-6 right-6">
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-            <X size={24} />
+        <div className="absolute top-6 right-6 z-10">
+          <button onClick={onClose} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+            <X size={20} />
           </button>
         </div>
 
-        <div className="p-10">
+        <div className="p-10 overflow-y-auto custom-scrollbar">
           <div className="mb-8 text-center">
             <div className="w-20 h-20 flex items-center justify-center mx-auto mb-4">
                <img src="https://i.postimg.cc/m2R4f9Fv/Rent4Cars.png" alt="Rent4Cars Logo" className="w-full h-full object-contain" />
