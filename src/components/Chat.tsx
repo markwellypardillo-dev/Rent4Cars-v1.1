@@ -108,22 +108,22 @@ export default function Chat({ user, openAuth }: ChatProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-12 py-12">
-      <div className="glass rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col h-[700px]">
+    <div className="max-w-4xl mx-auto px-4 sm:px-12 py-6 sm:py-12">
+      <div className="glass rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col h-[80vh] sm:h-[700px]">
         {/* Chat Header */}
-        <div className="bg-gray-900 p-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white relative">
-              <Wrench size={24} />
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-2 border-gray-900 rounded-full animate-pulse" />
+        <div className="bg-gray-900 p-4 sm:p-6 flex items-center justify-between">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-xl sm:rounded-2xl flex items-center justify-center text-white relative shrink-0">
+              <Wrench size={20} className="sm:w-6 sm:h-6" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-gray-900 rounded-full animate-pulse" />
             </div>
             <div>
-              <h3 className="text-white font-bold">Logistics Support Gateway</h3>
+              <h3 className="text-white font-bold text-sm sm:text-base">Logistics Support Gateway</h3>
             </div>
           </div>
           <button 
             onClick={fetchHistory}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white transition-colors p-2"
           >
             <RefreshCw size={20} />
           </button>
@@ -132,7 +132,7 @@ export default function Chat({ user, openAuth }: ChatProps) {
         {/* Message Log (XSLT Rendered) */}
         <div 
           ref={scrollRef}
-          className="flex-1 overflow-y-auto p-8 space-y-4 custom-scrollbar bg-gray-50/50 dark:bg-gray-950/50"
+          className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 custom-scrollbar bg-gray-50/50 dark:bg-gray-950/50"
         >
           {loading ? (
             <div className="h-full flex items-center justify-center">
@@ -141,7 +141,7 @@ export default function Chat({ user, openAuth }: ChatProps) {
           ) : messagesHtml ? (
             <div dangerouslySetInnerHTML={{ __html: messagesHtml }} />
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 space-y-4">
+            <div className="h-full flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 space-y-4 px-4 text-center">
               <MessageSquare size={48} className="opacity-20" />
               <p className="text-sm">No message logs found in XML persistent storage.</p>
             </div>
@@ -151,20 +151,20 @@ export default function Chat({ user, openAuth }: ChatProps) {
 
 
         {/* Input Area */}
-        <form onSubmit={handleSend} className="p-6 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-4">
+        <form onSubmit={handleSend} className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-2 sm:gap-4">
           <input
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Type your message to the mechanics..."
-            className="flex-1 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+            className="flex-1 min-w-0 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
           />
           <button
             type="submit"
             disabled={isSending || !inputText.trim()}
-            className="w-14 h-14 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+            className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 bg-primary text-white rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           >
-            <Send size={24} className={isSending ? 'animate-pulse' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform'} />
+            <Send size={20} className={`sm:w-6 sm:h-6 ${isSending ? 'animate-pulse' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform'}`} />
           </button>
         </form>
       </div>
