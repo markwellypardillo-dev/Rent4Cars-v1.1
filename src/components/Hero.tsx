@@ -77,17 +77,6 @@ export default function Hero({ onGetStarted }: HeroProps) {
             Explore Fleet
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>
-          
-          <div className="flex gap-4">
-             <div className="flex flex-col items-center justify-center border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-xl p-3 w-20 h-20 shadow-sm">
-                <span className="text-xl font-bold text-gray-900 dark:text-white">12K+</span>
-                <span className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-medium">Clients</span>
-             </div>
-             <div className="flex flex-col items-center justify-center border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-xl p-3 w-20 h-20 shadow-sm">
-                <span className="text-xl font-bold text-gray-900 dark:text-white">50+</span>
-                <span className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-medium">Hubs</span>
-             </div>
-          </div>
         </motion.div>
 
         <div className="grid grid-cols-2 gap-4 pt-8">

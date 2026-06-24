@@ -156,7 +156,7 @@ export default function AdminLiveChat({ user, isOpen, onClose, onUnreadChange }:
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative w-full max-w-5xl h-[90vh] md:h-[80vh] bg-white dark:bg-gray-900 rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden ring-1 ring-gray-200 dark:ring-gray-800"
+            className="relative w-full max-w-5xl h-[90vh] md:h-[80vh] bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row overflow-hidden ring-1 ring-gray-200/50 dark:ring-gray-800/50"
           >
             <button
               onClick={onClose}

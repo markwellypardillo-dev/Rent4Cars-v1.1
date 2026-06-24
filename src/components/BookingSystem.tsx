@@ -729,9 +729,9 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white dark:bg-gray-900 rounded-[2.5rem] w-full max-w-xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh]"
+        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] w-full max-w-xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh]"
       >
-        <div className="p-8 pb-0 flex justify-between items-center shrink-0">
+        <div className="p-6 md:p-8 pb-0 flex justify-between items-center shrink-0">
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((i) => {
               const active = (step === 'fulfillment' && i === 1) || 
@@ -750,14 +750,14 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
           </div>
           <button 
             onClick={onClose}
-            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-500 dark:text-gray-400"
+            className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-500 dark:text-gray-400 shrink-0"
           >
             <X size={20} />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-8 pt-0 custom-scrollbar relative">
-          <div className="sticky top-0 z-50 bg-white dark:bg-gray-900 pt-8 pb-2 -mx-8 px-8 transition-colors" style={{marginLeft: '-2rem', marginRight: '-2rem'}}>
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 pt-6 custom-scrollbar relative">
+          <div className="sticky top-0 z-50 bg-white/0 dark:bg-gray-900/0 pt-2 pb-2 -mx-6 md:-mx-8 px-6 md:px-8 transition-colors">
             {submitError && (
               <div className="mb-4 p-4 bg-primary border-2 border-primary rounded-2xl text-white text-sm font-bold flex justify-between items-center shadow-lg shadow-primary/20">
                 <span>{submitError}</span>
@@ -771,11 +771,11 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
         </div>
 
         {step !== 'confirmation' && (
-          <div className="p-8 pt-0 flex gap-3 shrink-0">
+          <div className="p-6 md:p-8 pt-0 flex gap-3 shrink-0">
             {step !== 'fulfillment' && (
               <button 
                 onClick={prevStep}
-                className="p-4 rounded-2xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all border border-transparent dark:border-gray-700"
+                className="p-4 rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all border border-white/50 dark:border-gray-700/50 backdrop-blur-md"
               >
                 <ArrowLeft size={24} />
               </button>

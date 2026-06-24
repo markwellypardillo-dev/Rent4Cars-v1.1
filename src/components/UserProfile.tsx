@@ -120,14 +120,14 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className={`relative w-full bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col ${
+        className={`relative w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-3xl border border-white/50 dark:border-gray-800/50 shadow-2xl overflow-hidden flex flex-col ${
           isAdmin 
             ? 'max-w-md md:max-w-none md:w-full md:h-full rounded-[2.5rem] md:rounded-3xl max-h-[90vh] md:max-h-[calc(100vh-3rem)]' 
             : 'max-w-md rounded-[2.5rem] max-h-[90vh]'
         }`}
       >
-        <div className="absolute top-6 right-6 z-10">
-          <button onClick={onClose} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <div className="absolute top-4 right-4 md:top-6 md:right-6 z-10">
+          <button onClick={onClose} className="p-2 bg-gray-100/50 dark:bg-gray-800/50 backdrop-blur-md rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border border-white/50 dark:border-gray-700/50">
             <X size={20} />
           </button>
         </div>
@@ -139,7 +139,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                 <button 
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-24 h-24 shrink-0 bg-primary/10 rounded-full flex items-center justify-center mx-auto overflow-hidden border-4 border-white dark:border-gray-900 shadow-lg relative"
+                  className="w-24 h-24 shrink-0 bg-white/50 dark:bg-gray-800/50 rounded-full flex items-center justify-center mx-auto overflow-hidden border border-white/50 dark:border-gray-700/50 backdrop-blur-md shadow-lg relative"
                 >
                     {avatarUrl ? (
                         <img 
@@ -194,7 +194,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                        <h4 className="text-[10px] md:text-xs font-bold uppercase text-primary tracking-widest leading-tight mb-1">Root Access</h4>
                        <p className="text-2xl md:text-4xl font-display font-bold text-gray-900 dark:text-white">Admin</p>
                     </div>
-                    <div className="bg-gray-50 dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-3xl p-5 md:p-8 flex flex-col justify-center items-center text-center transition-transform hover:scale-[1.02]">
+                    <div className="bg-white/50 dark:bg-gray-800/30 border-2 border-white/50 dark:border-gray-700/50 backdrop-blur-sm rounded-3xl p-5 md:p-8 flex flex-col justify-center items-center text-center transition-transform hover:scale-[1.02]">
                        <Activity size={28} className="text-gray-900 dark:text-white mb-3" />
                        <h4 className="text-[10px] md:text-xs font-bold uppercase text-gray-500 tracking-widest leading-tight mb-1">System Status</h4>
                        <p className="text-2xl md:text-4xl font-display font-bold text-green-500">Online</p>
@@ -204,7 +204,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                  <button
                   type="button"
                   onClick={() => setShowAdminRentals(true)}
-                  className="w-full p-6 md:p-8 bg-gray-900 dark:bg-gray-800 border-2 border-gray-800 dark:border-gray-700 text-white rounded-3xl font-bold hover:bg-gray-800 dark:hover:bg-gray-700 transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-xl text-left md:text-center group"
+                  className="w-full p-6 md:p-8 bg-gray-900/80 dark:bg-gray-800/80 backdrop-blur-md border border-gray-800/50 dark:border-gray-700/50 text-white rounded-3xl font-bold hover:bg-gray-800 dark:hover:bg-gray-700 transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-xl text-left md:text-center md:col-span-1 group"
                 >
                   <div className="w-12 h-12 md:w-20 md:h-20 bg-white/10 rounded-full flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
                     <Car size={24} className="text-white md:w-10 md:h-10" />
@@ -218,9 +218,9 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                 <button
                   type="button"
                   onClick={() => setShowFleetManager(true)}
-                  className="w-full p-6 md:p-8 bg-white dark:bg-gray-800/80 border-2 border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white rounded-3xl font-bold hover:border-primary dark:hover:border-primary transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-sm text-left md:text-center group"
+                  className="w-full p-6 md:p-8 bg-white/50 dark:bg-gray-800/30 backdrop-blur-md border border-white/50 dark:border-gray-700/50 text-gray-900 dark:text-white rounded-3xl font-bold hover:border-primary dark:hover:border-primary transition-all flex md:flex-col items-center md:justify-center gap-4 md:gap-6 shadow-sm text-left md:text-center group md:col-span-1"
                 >
-                  <div className="w-12 h-12 md:w-20 md:h-20 bg-gray-50 dark:bg-gray-900 rounded-full flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:text-primary transition-all duration-300">
+                  <div className="w-12 h-12 md:w-20 md:h-20 bg-white/50 dark:bg-gray-800/50 border border-white/50 dark:border-gray-700/50 rounded-full flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:text-primary transition-all duration-300">
                     <Settings size={24} className="text-gray-400 md:w-10 md:h-10" />
                   </div>
                   <div>
@@ -247,7 +247,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
 
                   <div className="space-y-1">
                     <label className="text-[10px] md:text-xs uppercase font-bold text-gray-400 px-1 dark:text-gray-500">System Config</label>
-                    <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-3xl px-5 py-4 md:py-6">
+                    <div className="flex items-center justify-between bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm rounded-3xl px-5 py-4 md:py-6">
                       <span className="text-sm font-medium text-gray-900 dark:text-white flex items-center gap-2">
                          <Settings size={18} className="text-gray-500" /> Theme
                       </span>
@@ -268,7 +268,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                       placeholder="e.g. Mark Pardillo"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
                     />
                   </div>
                 </div>
@@ -282,7 +282,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                       placeholder="e.g. Davao City, PH"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
                     />
                   </div>
                 </div>
@@ -305,14 +305,14 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                       placeholder="Paste image URL here"
                       value={avatarUrl.startsWith('data:') ? 'Local file selected' : avatarUrl}
                       onChange={(e) => setAvatarUrl(e.target.value)}
-                      className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all text-ellipsis"
+                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all text-ellipsis"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-gray-400 px-1 dark:text-gray-500">Appearance</label>
-                  <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-4 py-3">
+                  <div className="flex items-center justify-between bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm rounded-2xl px-4 py-3">
                     <span className="text-sm font-medium text-gray-900 dark:text-white mt-1">Theme</span>
                     <DarkModeToggle />
                   </div>
@@ -349,7 +349,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                   type="button"
                   onClick={fetchReport}
                   disabled={loadingReport}
-                  className="w-full py-4 bg-white border-2 border-gray-100 text-gray-900 rounded-2xl font-bold hover:bg-gray-50 transition-all flex items-center justify-center gap-2 mb-3"
+                  className="w-full py-4 bg-white/50 dark:bg-gray-800/30 backdrop-blur-md border border-white/50 dark:border-gray-700/50 text-gray-900 dark:text-white rounded-2xl font-bold hover:bg-white dark:hover:bg-gray-800 transition-all flex items-center justify-center gap-2 mb-3"
                 >
                   {loadingReport ? (
                     <Loader2 size={20} className="animate-spin text-primary" />
@@ -364,7 +364,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                 <button
                   type="button"
                   onClick={() => setShowRentals(true)}
-                  className="w-full py-4 bg-primary/5 border-2 border-primary/10 text-primary rounded-2xl font-bold hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-primary/10 backdrop-blur-md border border-primary/20 text-primary rounded-2xl font-bold hover:bg-primary/20 transition-all flex items-center justify-center gap-2"
                 >
                   <Car size={20} />
                   Track My Rentals
@@ -412,7 +412,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
           </div>
         </div>
         
-        <div className="bg-gray-50 p-4 text-center border-t border-gray-100 dark:bg-gray-900/50 dark:border-gray-800">
+        <div className="bg-gray-50/50 dark:bg-gray-900/50 backdrop-blur-md p-4 text-center border-t border-white/50 dark:border-gray-800/50">
            <p className="text-[10px] uppercase font-bold text-gray-400 tracking-widest italic">
               "Your Journey, Our Priority"
            </p>

@@ -102,7 +102,7 @@ export default function AdminRentals({ onClose }: AdminRentalsProps) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white dark:bg-gray-900 rounded-[2.5rem] w-full max-w-4xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[85vh]"
+        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] w-full max-w-4xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[85vh]"
       >
         <div className="p-8 pb-4 flex justify-between items-center border-b border-gray-100 dark:border-gray-800 shrink-0">
           <div>

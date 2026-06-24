@@ -135,10 +135,10 @@ export default function Auth({ onClose, onBypass }: AuthProps) {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl shadow-gray-900/20 overflow-hidden max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-md bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] shadow-2xl shadow-gray-900/20 overflow-hidden max-h-[90vh] flex flex-col"
       >
-        <div className="absolute top-6 right-6 z-10">
-          <button onClick={onClose} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <div className="absolute top-4 right-4 md:top-6 md:right-6 z-10">
+          <button onClick={onClose} className="p-2 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border border-gray-200 dark:border-gray-700">
             <X size={20} />
           </button>
         </div>
