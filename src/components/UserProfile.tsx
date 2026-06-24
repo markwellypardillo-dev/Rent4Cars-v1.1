@@ -47,14 +47,43 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        setError('Image too large. Please select an image under 2MB.');
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image too large. Please select an image under 5MB.');
         return;
       }
 
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarUrl(reader.result as string);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 400;
+          const MAX_HEIGHT = 400;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Compress significantly to avoid hitting payload size limits
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          setAvatarUrl(compressedBase64);
+        };
+        img.src = event.target?.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -261,14 +290,14 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-gray-400 px-1 dark:text-gray-500">Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 z-10" size={18} />
                     <input
                       type="text"
                       required
                       placeholder="e.g. Mark Pardillo"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all relative z-0"
                     />
                   </div>
                 </div>
@@ -276,13 +305,13 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-gray-400 px-1 dark:text-gray-500">Location</label>
                   <div className="relative">
-                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" size={18} />
+                    <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 z-10" size={18} />
                     <input
                       type="text"
                       placeholder="e.g. Davao City, PH"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all relative z-0"
                     />
                   </div>
                 </div>
@@ -299,13 +328,13 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
                     </button>
                   </div>
                   <div className="relative">
-                    <Camera className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <Camera className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10" size={18} />
                     <input
                       type="text"
                       placeholder="Paste image URL here"
                       value={avatarUrl.startsWith('data:') ? 'Local file selected' : avatarUrl}
                       onChange={(e) => setAvatarUrl(e.target.value)}
-                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all text-ellipsis"
+                      className="w-full bg-white/50 dark:bg-gray-800/30 border border-white/50 dark:border-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-white rounded-2xl pl-12 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all text-ellipsis relative z-0"
                     />
                   </div>
                 </div>
