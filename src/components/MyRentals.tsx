@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { X, Loader2, Calendar, MapPin, CreditCard, Navigation } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import CarTracker from './CarTracker';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface MyRentalsProps {
   user: any;
@@ -14,6 +15,8 @@ export default function MyRentals({ user, onClose }: MyRentalsProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [trackingRental, setTrackingRental] = useState<any>(null);
+
+  useBackButton(!trackingRental, onClose);
 
   useEffect(() => {
     fetchRentals();
@@ -79,7 +82,7 @@ export default function MyRentals({ user, onClose }: MyRentalsProps) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[80vh]"
+        className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[80vh]"
       >
         <div className="p-8 pb-4 flex justify-between items-center border-b border-gray-100 dark:border-gray-800 shrink-0">
           <div>

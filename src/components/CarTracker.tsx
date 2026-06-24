@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, Navigation, Signal, Battery, Car, X, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface CarTrackerProps {
   rental: any;
@@ -14,6 +15,8 @@ export default function CarTracker({ rental, onClose }: CarTrackerProps) {
     battery: 100,
     signal: 'Strong'
   });
+
+  useBackButton(true, onClose);
 
   useEffect(() => {
     // Simulate connection delay

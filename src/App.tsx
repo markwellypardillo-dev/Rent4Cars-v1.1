@@ -22,7 +22,6 @@ import BookingSystem from './components/BookingSystem';
 import { supabase } from './lib/supabase';
 import { Car, Notification, NotificationService } from './services/dataService';
 import NotificationToast from './components/NotificationToast';
-import { useBackButton } from './hooks/useBackButton';
 
 export default function App() {
   const [user, setUser] = useState<any | null>(null);
@@ -187,8 +186,6 @@ export default function App() {
     setActiveMode(null);
     setSelectedCar(null);
   }, []);
-
-  useBackButton(isModalOpen, handleModalClose);
 
   return (
     <div className="min-h-screen morph-bg selection:bg-primary selection:text-white">

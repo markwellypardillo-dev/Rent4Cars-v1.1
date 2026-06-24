@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Calendar, MapPin, CreditCard, CheckCircle, Upload, Printer, ArrowRight, ArrowLeft, Shield } from 'lucide-react';
 import { Car, MessagingService, NotificationService } from '../services/dataService';
 import { supabase } from '../lib/supabase';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface BookingSystemProps {
   car: Car;
@@ -32,6 +33,8 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [bookedDates, setBookedDates] = useState<string[]>([]);
   const [checkingAvailability, setCheckingAvailability] = useState(false);
+
+  useBackButton(true, onClose);
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -729,7 +732,7 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] w-full max-w-xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh]"
+        className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-[2.5rem] w-full max-w-xl overflow-hidden shadow-2xl relative z-10 flex flex-col max-h-[90vh]"
       >
         <div className="p-6 md:p-8 pb-0 flex justify-between items-center shrink-0">
           <div className="flex gap-2">
@@ -771,21 +774,21 @@ export default function BookingSystem({ car, user, onClose, onSuccess }: Booking
         </div>
 
         {step !== 'confirmation' && (
-          <div className="p-6 md:p-8 pt-0 flex gap-3 shrink-0">
+          <div className="p-4 md:p-8 pt-0 flex gap-2 md:gap-3 shrink-0">
             {step !== 'fulfillment' && (
               <button 
                 onClick={prevStep}
-                className="p-4 rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all border border-white/50 dark:border-gray-700/50 backdrop-blur-md"
+                className="px-4 py-3 md:p-4 rounded-xl md:rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all border border-gray-200 dark:border-gray-700/50 backdrop-blur-md shrink-0 flex items-center justify-center"
               >
-                <ArrowLeft size={24} />
+                <ArrowLeft size={20} className="md:w-6 md:h-6" />
               </button>
             )}
             <button 
               onClick={nextStep}
-              className="flex-1 bg-primary text-white py-4 rounded-2xl font-bold shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group"
+              className="flex-1 bg-primary text-white py-3 md:py-4 rounded-xl md:rounded-2xl text-sm md:text-base font-bold shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group"
             >
               {step === 'payment' ? 'Complete Booking' : 'Next Step'}
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={18} className="md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         )}

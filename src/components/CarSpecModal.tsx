@@ -3,6 +3,7 @@ import { X, Shield, Gauge, Zap, Info, Heart, Star } from 'lucide-react';
 import { Car, WishlistService } from '../services/dataService';
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface CarSpecModalProps {
   car: Car;
@@ -14,6 +15,8 @@ interface CarSpecModalProps {
 export default function CarSpecModal({ car, user, onClose, onRent }: CarSpecModalProps) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
+
+  useBackButton(true, onClose);
 
   useEffect(() => {
     if (user) {
@@ -104,7 +107,7 @@ export default function CarSpecModal({ car, user, onClose, onRent }: CarSpecModa
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] w-full max-w-2xl overflow-y-auto custom-scrollbar shadow-2xl relative z-10 max-h-[90vh]"
+        className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-[2.5rem] w-full max-w-2xl overflow-y-auto custom-scrollbar shadow-2xl relative z-10 max-h-[90vh]"
       >
         <button 
           onClick={onClose}

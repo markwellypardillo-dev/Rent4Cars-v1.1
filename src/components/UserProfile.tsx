@@ -7,6 +7,7 @@ import MyRentals from './MyRentals';
 import AdminRentals from './AdminRentals';
 import AdminFleetManager from './AdminFleetManager';
 import DarkModeToggle from './DarkModeToggle';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface UserProfileProps {
   user: any;
@@ -30,6 +31,9 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
   const [showAdminRentals, setShowAdminRentals] = useState(false);
   const [showFleetManager, setShowFleetManager] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // We only want the back button to close UserProfile if no inner modal is open
+  useBackButton(!showRentals && !showAdminRentals && !showFleetManager, onClose);
 
   const fetchReport = async () => {
     setLoadingReport(true);
@@ -149,7 +153,7 @@ export default function UserProfile({ user, onClose, onUpdate }: UserProfileProp
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className={`relative w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-3xl border border-white/50 dark:border-gray-800/50 shadow-2xl overflow-hidden flex flex-col ${
+        className={`relative w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl shadow-2xl overflow-hidden flex flex-col ${
           isAdmin 
             ? 'max-w-md md:max-w-none md:w-full md:h-full rounded-[2.5rem] md:rounded-3xl max-h-[90vh] md:max-h-[calc(100vh-3rem)]' 
             : 'max-w-md rounded-[2.5rem] max-h-[90vh]'

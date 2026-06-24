@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Car as CarIcon, Plus, Edit2, Trash2, X, Search, Save, Loader2 } from 'lucide-react';
 import { MessagingService, Car } from '../services/dataService';
+import { useBackButton } from '../hooks/useBackButton';
 
 interface AdminFleetManagerProps {
   onClose: () => void;
@@ -13,6 +14,8 @@ export default function AdminFleetManager({ onClose }: AdminFleetManagerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [saving, setSaving] = useState(false);
+
+  useBackButton(true, onClose);
 
   useEffect(() => {
     MessagingService.getFleet().then(data => {
@@ -57,7 +60,7 @@ export default function AdminFleetManager({ onClose }: AdminFleetManagerProps) {
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl border border-white/50 dark:border-gray-800/50 rounded-[2.5rem] w-full max-w-5xl shadow-2xl relative z-10 flex flex-col h-[90vh] md:h-[85vh] overflow-hidden"
+        className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-[2.5rem] w-full max-w-5xl shadow-2xl relative z-10 flex flex-col h-[90vh] md:h-[85vh] overflow-hidden"
       >
         <div className="px-6 py-4 md:px-8 md:py-6 border-b border-gray-100 dark:border-gray-800/50 flex justify-between items-center shrink-0">
           <div className="flex items-center gap-3">
